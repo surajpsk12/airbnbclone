@@ -61,9 +61,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: space-evenly;
+    align-content: space-evenly;
 }
-
 /* Cards */
 .card{
     border: none !important;
@@ -110,4 +109,17 @@
     background-color: #fe424d !important;
     border: none !important;
 }
+/* 
+Show Page */
 
+.btns{
+    display: flex;;
+}
+
+.show-img{
+    height: 30vh;
+}
+.show-card{
+    padding-left: 0;
+    padding-right: 0;
+}
