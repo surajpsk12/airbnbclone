@@ -110,26 +110,6 @@ app.delete("/listings/:id", async (req,res)=>{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.listen(port, () => {
     console.log(`server listening at http://localhost:${port}`);
 }); 

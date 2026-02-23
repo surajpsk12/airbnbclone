@@ -3,9 +3,5 @@
 
 // The current database to use.
 use("Wanderlust");
-
-
-// List all collections in the current database.
-showcollections();
-
+db.listings.find({ price: null })
 
