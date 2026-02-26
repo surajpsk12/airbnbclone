@@ -3,5 +3,4 @@
 
 // The current database to use.
 use("Wanderlust");
-db.listings.find({ price: null })
-
+db.listings.find({title: Ski Chalet in Aspen})
