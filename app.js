@@ -9,6 +9,8 @@ const ExpressError = require('./utils/ExpressError');
 const MONGO_URL = "mongodb://127.0.0.1:27017/Wanderlust";
 const listings = require('./routes/listing.js');
 const reviews = require('./routes/review.js')
+const session = require('express-session');
+const flash = require('connect-flash');
 
 
 main().then(() => {
@@ -31,8 +33,25 @@ app.use(methodOverride('_method'));
 app.engine("ejs", ejsMate);
 
 
+const sessionOptions = {
+    secret: 'mysecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie : {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+    }
+}
 
+app.use(session(sessionOptions));
+app.use(flash());
 
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+});
 
 app.get('/',
      (req, res) => {
