@@ -1,25 +1,13 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
 const WrapAsync = require('../utils/WrapAsync');
-const ExpressError = require('../utils/ExpressError');
-const { reviewSchema} = require('../schema');
 const Listing = require('../models/listing.js');
 const Review = require('../models/review.js');
+const { isLoggedIn , validateReview, isReviewAuthor} = require('../middleware.js');
 
 
 
 
-
-
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(400, msg);
-    } else {
-        next();
-    }
-}
 
 
 
@@ -30,13 +18,15 @@ const validateReview = (req, res, next) => {
 // Post route to create a new review for a listing
 router.post(
     "/",
+    isLoggedIn,
     validateReview,
     WrapAsync(async (req,res)=>{
         const {id} = req.params;
         const listing = await Listing.findById(id);
-        const review = new Review(req.body.review);
-        listing.reviews.push(review);
-        await review.save();
+        const newReview = new Review(req.body.review);
+        newReview.author = req.user._id;
+        listing.reviews.push(newReview);
+        await newReview.save();
         await listing.save();
         req.flash("success", "Successfully created a new review!");
         res.redirect(`/listings/${id}`);
@@ -47,6 +37,8 @@ router.post(
 // delete route to delete a review from a listing
 router.delete(
     "/:reviewId",
+    isLoggedIn,
+    isReviewAuthor,
     WrapAsync(async (req,res)=>{
         const {id, reviewId} = req.params;
         await Review.findByIdAndDelete(reviewId);
