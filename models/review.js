@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { create } = require('./listing');
 const Schema = mongoose.Schema;
 
 
@@ -16,7 +15,8 @@ const reviewSchema = new Schema({
     },
     author : {
         type : Schema.Types.ObjectId ,
-        ref : "User"
+        ref : "User",
+        required : true
     }
 });
 

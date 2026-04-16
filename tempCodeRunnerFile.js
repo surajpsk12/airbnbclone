@@ -3,4 +3,11 @@
 
 // The current database to use.
 use("Wanderlust");
-db.listings.find({title: Ski Chalet in Aspen})
+
+// Find a document in a collection.
+db.getCollection("reviews").findOne({
+
+});
+
+db.deleteMany();
+

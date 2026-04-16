@@ -58,6 +58,14 @@ module.exports.validateReview = (req, res, next) => {
 module.exports.isReviewAuthor = async (req,res,next) => {
     const {id , reviewId} = req.params;
     const review = await Review.findById(reviewId);
+    if(!review){
+        req.flash("error", "Review not found!");
+        return res.redirect(`/listings/${id}`);
+    }
+    if(!review.author){
+        req.flash("error", "This review has no valid author and cannot be managed.");
+        return res.redirect(`/listings/${id}`);
+    }
     if(!review.author.equals(res.locals.currUser._id)){
         req.flash("error", "You are not the author of this review!");
         return res.redirect(`/listings/${id}`);
